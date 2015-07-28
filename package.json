@@ -1,0 +1,24 @@
+{
+  "name": "camoh",
+  "version": "0.1.0",
+  "description": "Camoh is a concurrent test framework for node.js.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bdd",
+    "test",
+    "mocha",
+    "concurrent",
+    "parallel"
+  ],
+  "author": "Mark Andrus Roberts <markandrusroberts@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.15",
+    "diff": "^1.4.0",
+    "mocha": "^2.2.5",
+    "supports-color": "^1.2.0"
+  }
+}
