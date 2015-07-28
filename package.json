@@ -1,7 +1,7 @@
 {
   "name": "camoh",
   "version": "0.1.0",
-  "description": "Camoh is a concurrent test framework for node.js.",
+  "description": "Camoh is a parallel JavaScript test framework modeled after Mocha.",
   "main": "lib/index.js",
   "bin": {
     "camoh": "./bin/camoh",
@@ -12,12 +12,17 @@
   },
   "keywords": [
     "bdd",
-    "test",
-    "mocha",
     "concurrent",
-    "parallel"
+    "integration",
+    "mocha",
+    "parallel",
+    "test",
+    "unit"
   ],
-  "author": "Mark Andrus Roberts <markandrusroberts@gmail.com>",
+  "author": {
+    "name": "Mark Andrus Roberts",
+    "email": "<markandrusroberts@gmail.com>"
+  },
   "license": "ISC",
   "dependencies": {
     "blessed": "^0.1.15",
