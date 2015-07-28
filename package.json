@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Camoh is a concurrent test framework for node.js.",
   "main": "lib/index.js",
+  "bin": {
+    "camoh": "./bin/camoh",
+    "_camoh": "./bin/_camoh"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +21,7 @@
   "license": "ISC",
   "dependencies": {
     "blessed": "^0.1.15",
+    "commander": "^2.3.0",
     "diff": "^1.4.0",
     "mocha": "^2.2.5",
     "supports-color": "^1.2.0"

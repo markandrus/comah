@@ -1,0 +1,231 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('commander'),
+  path = require('path'),
+  fs = require('fs'),
+  resolve = path.resolve,
+  exists = fs.existsSync || path.existsSync,
+  Camoh = function() {}, /* require('../'), */
+  utils = Camoh.utils,
+  join = path.join,
+  cwd = process.cwd(),
+  camoh = new Camoh;
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date
+  , setTimeout = global.setTimeout
+  , setInterval = global.setInterval
+  , clearTimeout = global.clearTimeout
+  , clearInterval = global.clearInterval;
+
+/**
+ * Files.
+ */
+
+var files = [];
+
+/**
+ * Globals.
+ */
+
+var globals = [];
+
+/**
+ * Requires.
+ */
+
+var requires = [];
+
+// options
+
+program
+  .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
+  .usage('[debug] [options] [files]')
+  .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
+  .option('-u, --ui <name>', 'specify user-interface (bdd)', 'bdd')
+  .option('--harmony', 'enable all harmony features (except typeof)')
+  .option('--es_staging', 'enable all staged features')
+  .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
+  .option('--harmony-generators', 'enable harmony generators')
+  .option('--harmony-proxies', 'enable harmony proxies')
+  .option('--harmony_shipping', 'enable all shipped harmony fetaures (iojs)')
+  .option('--harmony_arrow_functions', 'enable "harmony arrow functions" (iojs)')
+  .option('--harmony_rest_parameters', 'enable "harmony rest parameters" (iojs)')
+  .option('--harmony_proxies', 'enable "harmony proxies" (iojs)')
+  .option('--harmony_classes', 'enable "harmony classes" (iojs)')
+  .option('--interfaces', 'display available interfaces')
+  .option('--reporters', 'display available reporters')
+
+program.name = 'camoh';
+
+// --globals
+
+program.on('globals', function(val){
+  globals = globals.concat(list(val));
+});
+
+// --reporters
+
+program.on('reporters', function(){
+  console.log();
+  console.log('    spec - hierarchical spec list');
+  console.log();
+  process.exit();
+});
+
+// --interfaces
+
+program.on('interfaces', function(){
+  console.log('');
+  console.log('    bdd');
+  console.log('');
+  process.exit();
+});
+
+// parse args
+
+program.parse(process.argv);
+
+// infinite stack traces
+
+Error.stackTraceLimit = Infinity; // TODO: config
+
+// reporter options
+
+var reporterOptions = {};
+if (program.reporterOptions !== undefined) {
+    program.reporterOptions.split(",").forEach(function(opt) {
+        var L = opt.split("=");
+        if (L.length > 2 || L.length === 0) {
+            throw new Error("invalid reporter option '" + opt + "'");
+        } else if (L.length === 2) {
+            reporterOptions[L[0]] = L[1];
+        } else {
+            reporterOptions[L[0]] = true;
+        }
+    });
+}
+
+// reporter
+
+camoh.reporter(program.reporter, reporterOptions);
+
+// interface
+
+camoh.ui(program.ui);
+
+// load reporter
+
+try {
+  Reporter = require('../lib/reporters/' + program.reporter);
+} catch (err) {
+  try {
+    Reporter = require(program.reporter);
+  } catch (err) {
+    throw new Error('reporter "' + program.reporter + '" does not exist');
+  }
+}
+
+//args
+
+var args = program.args;
+
+// default files to test/*.{js,coffee}
+
+if (!args.length) args.push('test');
+
+args.forEach(function(arg){
+  files = files.concat(utils.lookupFiles(arg, extensions, false));
+});
+
+// resolve
+
+files = files.map(function(path){
+  return resolve(path);
+});
+
+// load
+
+camoh.files = files;
+runner = camoh.run(program.exit ? exit : exitLater);
+
+function exitLater(code) {
+  process.on('exit', function() { process.exit(code) })
+}
+
+function exit(code) {
+  // flush output for Node.js Windows pipe bug
+  // https://github.com/joyent/node/issues/6247 is just one bug example
+  // https://github.com/visionmedia/camoh/issues/333 has a good discussion
+  function done() {
+    if (!(draining--)) process.exit(code);
+  }
+
+  var draining = 0;
+  var streams = [process.stdout, process.stderr];
+
+  streams.forEach(function(stream){
+    // submit empty write request and wait for completion
+    draining += 1;
+    stream.write('', done);
+  });
+
+  done();
+}
+
+process.on('SIGINT', function() { runner.abort(); })
+
+/**
+ * Parse list.
+ */
+
+function list(str) {
+  return str.split(/ *, */);
+}
+
+/**
+ * Hide the cursor.
+ */
+
+function hideCursor(){
+  process.stdout.write('\u001b[?25l');
+}
+
+/**
+ * Show the cursor.
+ */
+
+function showCursor(){
+  process.stdout.write('\u001b[?25h');
+}
+
+/**
+ * Stop play()ing.
+ */
+
+function stop() {
+  process.stdout.write('\u001b[2K');
+  clearInterval(play.timer);
+}
+
+/**
+ * Play the given array of strings.
+ */
+
+function play(arr, interval) {
+  var len = arr.length
+    , interval = interval || 100
+    , i = 0;
+
+  play.timer = setInterval(function(){
+    var str = arr[i++ % len];
+    process.stdout.write('\u001b[0G' + str);
+  }, interval);
+}
