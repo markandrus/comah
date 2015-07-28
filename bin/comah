@@ -2,15 +2,15 @@
 
 /**
  * This tiny wrapper file checks for known node flags and appends them
- * when found, before invoking the "real" _camoh(1) executable.
+ * when found, before invoking the "real" _comah(1) executable.
  */
 
 var spawn = require('child_process').spawn,
   path = require('path'),
   fs = require('fs'),
-  args = [path.join(__dirname, '_camoh')];
+  args = [path.join(__dirname, '_comah')];
 
-// load camoh.opts into process.argv
+// load comah.opts into process.argv
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];

@@ -1,11 +1,11 @@
 {
-  "name": "camoh",
+  "name": "comah",
   "version": "0.1.0",
-  "description": "Camoh is a parallel JavaScript test framework modeled after Mocha.",
+  "description": "comah is a parallel JavaScript test framework modeled after Mocha.",
   "main": "lib/index.js",
   "bin": {
-    "camoh": "./bin/camoh",
-    "_camoh": "./bin/_camoh"
+    "comah": "./bin/comah",
+    "_comah": "./bin/_comah"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
