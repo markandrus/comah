@@ -15,17 +15,15 @@ parallelizable. Camoh runs your tests in parallel.
 Writing Parallel Tests
 ----------------------
 
-Camoh provides the same domain-specific language (DSL) for behavior-driven
-development (BDD) tests you are used to with a few semantic differences.
+Camoh provides the same domain-specific language (DSL) for writing
+behavior-driven development (BDD) tests that you are used to but with a few
+semantic differences due to parallelization.
 
-### Within `describe`
+### `before` and `after`
 
-| Method       | Meaning                               |
-|:------------ |:------------------------------------- |
-| `before`     | Same as `beforeEach`                  |
-| `beforeEach` | Specify code to run before each `it`  |
-| `after`      | Same as `afterEach`                   |
-| `afterEach`  | Specify code to run after each `it`   |
+`before` and `after` are treated the same as `beforeEach` and `afterEach`,
+because camoh may fork up to `N` times and will no longer guarantee that
+`before` or `after` is called exactly _once_.
 
 Contributing
 ------------
