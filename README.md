@@ -1,4 +1,4 @@
-![comah](https://rawgit.com/markandrus/comah/master/img/logo.svg)
+![comah](https://cdn.rawgit.com/markandrus/comah/master/img/logo.svg)
 
 Comah is a parallel JavaScript test framework modeled after
 [Mocha](https://mochajs.org).
