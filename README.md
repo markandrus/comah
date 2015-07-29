@@ -1,4 +1,4 @@
-![pocha](https://cdn.rawgit.com/markandrus/pocha/master/img/logo.svg)
+![pocha](https://rawgit.com/markandrus/pocha/master/img/logo.svg)
 
 Pocha is a parallel JavaScript test framework modeled after
 [Mocha](https://mochajs.org).
