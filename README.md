@@ -1,5 +1,4 @@
-comah
-=====
+<h1 style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;border-radius:50%;background:#8a6343;color:white">comah</h1>
 
 Comah is a parallel JavaScript test framework modeled after
 [Mocha](https://mochajs.org).
