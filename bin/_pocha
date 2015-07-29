@@ -9,11 +9,11 @@ var program = require('commander'),
   fs = require('fs'),
   resolve = path.resolve,
   exists = fs.existsSync || path.existsSync,
-  Comah = function() {}, /* require('../'), */
-  utils = Comah.utils,
+  Pocha = function() {}, /* require('../'), */
+  utils = Pocha.utils,
   join = path.join,
   cwd = process.cwd(),
-  comah = new Comah;
+  pocha = new Pocha;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -63,7 +63,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
 
-program.name = 'comah';
+program.name = 'pocha';
 
 // --globals
 
@@ -115,11 +115,11 @@ if (program.reporterOptions !== undefined) {
 
 // reporter
 
-comah.reporter(program.reporter, reporterOptions);
+pocha.reporter(program.reporter, reporterOptions);
 
 // interface
 
-comah.ui(program.ui);
+pocha.ui(program.ui);
 
 // load reporter
 
@@ -153,8 +153,8 @@ files = files.map(function(path){
 
 // load
 
-comah.files = files;
-runner = comah.run(program.exit ? exit : exitLater);
+pocha.files = files;
+runner = pocha.run(program.exit ? exit : exitLater);
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
@@ -163,7 +163,7 @@ function exitLater(code) {
 function exit(code) {
   // flush output for Node.js Windows pipe bug
   // https://github.com/joyent/node/issues/6247 is just one bug example
-  // https://github.com/visionmedia/comah/issues/333 has a good discussion
+  // https://github.com/visionmedia/pocha/issues/333 has a good discussion
   function done() {
     if (!(draining--)) process.exit(code);
   }

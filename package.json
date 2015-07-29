@@ -1,11 +1,11 @@
 {
-  "name": "comah",
+  "name": "pocha",
   "version": "0.1.0",
-  "description": "comah is a parallel JavaScript test framework modeled after Mocha.",
+  "description": "pocha is a parallel JavaScript test framework modeled after Mocha.",
   "main": "lib/index.js",
   "bin": {
-    "comah": "./bin/comah",
-    "_comah": "./bin/_comah"
+    "pocha": "./bin/pocha",
+    "_pocha": "./bin/_pocha"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

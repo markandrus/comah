@@ -2,15 +2,13 @@
 
 /**
  * This tiny wrapper file checks for known node flags and appends them
- * when found, before invoking the "real" _comah(1) executable.
+ * when found, before invoking the "real" _pocha(1) executable.
  */
 
 var spawn = require('child_process').spawn,
   path = require('path'),
   fs = require('fs'),
-  args = [path.join(__dirname, '_comah')];
-
-// load comah.opts into process.argv
+  args = [path.join(__dirname, '_pocha')];
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];
