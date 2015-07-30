@@ -2,20 +2,12 @@
 
 var assert = require('assert');
 
-var Test = require('./lib/test2');
+describe('Foo', function() {
 
-var dsl = require('./lib/dsl');
-var describe = dsl.describe;
-var it = dsl.it;
-var beforeEach = dsl.beforeEach;
-var afterEach = dsl.afterEach;
-
-var tests = describe('Foo', function() {
-
-  console.log('Building "Foo"');
+  // console.log('Building "Foo"');
 
   beforeEach(function() {
-    console.log('Before "bar" and "qux"');
+    // console.log('Before "bar" and "qux"');
   });
 
   it('bar', function() {
@@ -24,10 +16,10 @@ var tests = describe('Foo', function() {
 
   describe('Baz', function() {
 
-    console.log('Building "Baz"');
+    // console.log('Building "Baz"');
 
     beforeEach(function() {
-      console.log('Before "qux"');
+      // console.log('Before "qux"');
     });
 
     it('qux', function() {
@@ -39,30 +31,13 @@ var tests = describe('Foo', function() {
     });
 
     afterEach(function() {
-      console.log('After "qux"');
+      // console.log('After "qux"');
     });
 
   });
 
   afterEach(function() {
-    console.log('After "bar" and "qux"');
+    // console.log('After "bar" and "qux"');
   });
 
-});
-
-function print(a) {
-  console.log(JSON.stringify(a));
-}
-
-tests = Test.tests(tests);
-Promise.all(tests.map(function(test) {
-  return test.run().then(function(error) {
-    if (!error) {
-      console.log(test._name, 'Passed');
-    } else {
-      console.log(test._name, 'Failed', error);
-    }
-  });
-})).then(function() {
-  console.log('All tests finished');
 });

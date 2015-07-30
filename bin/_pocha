@@ -9,11 +9,11 @@ var program = require('commander'),
   fs = require('fs'),
   resolve = path.resolve,
   exists = fs.existsSync || path.existsSync,
-  Pocha = function() {}, /* require('../'), */
-  utils = Pocha.utils,
+  Pocha = require('../lib/index2'),
+  Mocha = require('mocha'),
+  utils = Mocha.utils,
   join = path.join,
-  cwd = process.cwd(),
-  pocha = new Pocha;
+  cwd = process.cwd();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -50,6 +50,8 @@ program
   .usage('[debug] [options] [files]')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-u, --ui <name>', 'specify user-interface (bdd)', 'bdd')
+  .option('-l, --list', 'list tests')
+  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--harmony', 'enable all harmony features (except typeof)')
   .option('--es_staging', 'enable all staged features')
   .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
@@ -65,10 +67,17 @@ program
 
 program.name = 'pocha';
 
-// --globals
+// custom compiler support
 
-program.on('globals', function(val){
-  globals = globals.concat(list(val));
+var extensions = ['js'];
+program.compilers.forEach(function(c) {
+  var compiler = c.split(':')
+    , ext = compiler[0]
+    , mod = compiler[1];
+
+  if (mod[0] == '.') mod = join(process.cwd(), mod);
+  require(mod);
+  extensions.push(ext);
 });
 
 // --reporters
@@ -97,29 +106,9 @@ program.parse(process.argv);
 
 Error.stackTraceLimit = Infinity; // TODO: config
 
-// reporter options
-
-var reporterOptions = {};
-if (program.reporterOptions !== undefined) {
-    program.reporterOptions.split(",").forEach(function(opt) {
-        var L = opt.split("=");
-        if (L.length > 2 || L.length === 0) {
-            throw new Error("invalid reporter option '" + opt + "'");
-        } else if (L.length === 2) {
-            reporterOptions[L[0]] = L[1];
-        } else {
-            reporterOptions[L[0]] = true;
-        }
-    });
-}
-
 // reporter
 
-pocha.reporter(program.reporter, reporterOptions);
-
-// interface
-
-pocha.ui(program.ui);
+// pocha.reporter(program.reporter);
 
 // load reporter
 
@@ -153,32 +142,13 @@ files = files.map(function(path){
 
 // load
 
-pocha.files = files;
-runner = pocha.run(program.exit ? exit : exitLater);
-
-function exitLater(code) {
-  process.on('exit', function() { process.exit(code) })
+var pocha = new Pocha(files);
+if (program.list) {
+  pocha.list();
+  process.exit();
 }
 
-function exit(code) {
-  // flush output for Node.js Windows pipe bug
-  // https://github.com/joyent/node/issues/6247 is just one bug example
-  // https://github.com/visionmedia/pocha/issues/333 has a good discussion
-  function done() {
-    if (!(draining--)) process.exit(code);
-  }
-
-  var draining = 0;
-  var streams = [process.stdout, process.stderr];
-
-  streams.forEach(function(stream){
-    // submit empty write request and wait for completion
-    draining += 1;
-    stream.write('', done);
-  });
-
-  done();
-}
+var runner = pocha.run();
 
 process.on('SIGINT', function() { runner.abort(); })
 
