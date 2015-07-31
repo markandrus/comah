@@ -54,7 +54,7 @@ program
   .usage('[debug] [options] [files]')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-u, --ui <name>', 'specify user-interface (bdd)', 'bdd')
-  .option('-l, --list', "just list the tests (don't run them)")
+  .option('-l, --list', 'list the tests instead of running them')
   .option('-p, --pattern <pattern>', 'specify a prefix or regex for filtering tests (regexes should be enclosed in "/")')
   .option('-j, --jobs [number]', 'specify the number of jobs to run in parallel (no argument implies unbound; pass a ratio to also set concurrency)', ParallelRunner.DEFAULT_PARALLELISM)
   .option('-k, --concurrency [number]', 'specify the number of tests to run concurrently (no argument implies unbounded)', ConcurrentRunner.DEFAULT_CONCURRENCY)
@@ -105,6 +105,17 @@ program.on('interfaces', function(){
   console.log('');
   console.log('    bdd');
   console.log('');
+  process.exit();
+});
+
+// --runners
+
+program.on('runners', function(){
+  console.log();
+  console.log('    parallel - run tests in parallel');
+  console.log('    concurrent - run tests concurrently');
+  console.log('    sequential - run tests sequentially');
+  console.log();
   process.exit();
 });
 
