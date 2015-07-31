@@ -20,8 +20,8 @@ information.
 ### Specifying the number of jobs with `-j`
 
 Like make, pocha allows you to specify the number of jobs with `-j`. When no
-argument is supplied, the number of jobs is unbounded, i.e. pocha will fork
-a thread for every test in your test suite. By default, the number of jobs is
+argument is supplied, the number of jobs is unbounded: pocha will fork a
+process for every test in your test suite. By default, the number of jobs is
 equal to the number of CPUs your computer has.
 
 You can set the number of tests a job runs in parallel by passing a ratio with
