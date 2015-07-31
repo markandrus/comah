@@ -17,7 +17,7 @@ Usage
 You can use pocha like you would mocha. Run `pocha --help` for additional
 information.
 
-### Specifying the number of jobs (`-j`)
+### Specifying the number of jobs with `-j`
 
 Like make, pocha allows you to specify the number of jobs with `-j`. When no
 argument is supplied, the number of jobs is unbounded, i.e. pocha will fork
