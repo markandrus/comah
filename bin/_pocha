@@ -65,6 +65,7 @@ program
   .option('--harmony_classes', 'enable "harmony classes" (iojs)')
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
+  .option('--ipc <name>', 'the channel over which to do inter-process communication (IPC)')
 
 program.name = 'pocha';
 
@@ -143,7 +144,7 @@ files = files.map(function(path){
 
 // load
 
-var pocha = new Pocha(files);
+var pocha = new Pocha(files, program.ipc);
 if (program.list) {
   pocha.listTests(program.pattern);
   process.exit();
