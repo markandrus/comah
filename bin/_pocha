@@ -13,7 +13,9 @@ var program = require('commander'),
   Mocha = require('mocha'),
   utils = Mocha.utils,
   join = path.join,
-  cwd = process.cwd();
+  cwd = process.cwd(),
+  ParallelRunner = require('../lib/runners/parallel'),
+  ConcurrentRunner = require('../lib/runners/concurrent');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -45,6 +47,8 @@ var requires = [];
 
 // options
 
+var indent = '                                ';
+
 program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
@@ -52,6 +56,10 @@ program
   .option('-u, --ui <name>', 'specify user-interface (bdd)', 'bdd')
   .option('-l, --list', "just list the tests (don't run them)")
   .option('-p, --pattern <pattern>', 'specify a prefix or regex for filtering tests (regexes should be enclosed in "/")')
+  .option('-j, --jobs [number]', 'specify the number of jobs to run in parallel (no argument implies unbound; pass a ratio to also set concurrency)', ParallelRunner.DEFAULT_PARALLELISM)
+  .option('-k, --concurrency [number]', 'specify the number of tests to run concurrently (no argument implies unbounded)', ConcurrentRunner.DEFAULT_CONCURRENCY)
+  .option('--runner <name>', 'specify the runner to use', 'parallel')
+  .option('--sequential', 'run tests sequentially (sets the runner to "sequential")')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--harmony', 'enable all harmony features (except typeof)')
   .option('--es_staging', 'enable all staged features')
@@ -65,7 +73,7 @@ program
   .option('--harmony_classes', 'enable "harmony classes" (iojs)')
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
-  .option('--ipc <name>', 'the channel over which to do inter-process communication (IPC)')
+  .option('--runners', 'display available runners')
 
 program.name = 'pocha';
 
@@ -144,7 +152,7 @@ files = files.map(function(path){
 
 // load
 
-var pocha = new Pocha(files, program.ipc);
+var pocha = new Pocha(files, program.runner);
 if (program.list) {
   pocha.listTests(program.pattern);
   process.exit();
