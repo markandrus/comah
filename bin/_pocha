@@ -152,7 +152,7 @@ if (program.list) {
 
 var runner = pocha.runTests(program.pattern);
 
-process.on('SIGINT', function() { runner.abort(); })
+process.on('SIGINT', function() { /* runner.abort(); */ })
 
 /**
  * Parse list.

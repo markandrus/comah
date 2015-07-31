@@ -29,7 +29,6 @@
     "commander": "^2.3.0",
     "diff": "^1.4.0",
     "mocha": "^2.2.5",
-    "node-ipc": "^1.2.2",
     "supports-color": "^1.2.0"
   }
 }
