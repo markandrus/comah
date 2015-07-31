@@ -17,20 +17,33 @@ Usage
 You can use pocha like you would mocha. Run `pocha --help` for additional
 information.
 
-### Specifying the number of jobs with `-j`
+### Specifying the number of jobs with `-j X`
 
-Like make, pocha allows you to specify the number of jobs with `-j`. When no
+Like [make](https://www.gnu.org/software/make/manual/html_node/Parallel.html),
+pocha allows you to specify the number of jobs with `-j`. When no
 argument is supplied, the number of jobs is unbounded: pocha will fork a
 process for every test in your test suite. By default, the number of jobs is
-equal to the number of CPUs your computer has.
+equal to the number of CPUs in your computer.
 
-You can set the number of tests a job runs in parallel by passing a ratio with
-`:`. For example,
+### Specifying the number of tests to run concurrently with `-k Y`
+
+You can specify the number of tests each job runs concurrently with `-k`. When
+no argument is supplied, the number of concurrent tests is unbounded: pocha
+(or a child process) will run every test assigned to it concurrently. This
+is most useful for asynchronous tests.
+
+### Specifying a ratio of jobs to tests with `-j X:Y`
+
+You can set the number of tests a job runs concurrently by passing a ratio to
+`-j`. For example,
 
 - `-j 1:1` specifies sequential execution
 - `-j 3:2` will fork three processes, each running two tests at a time
 - `-j  :1` will fork a process for each test
 - `-j  :3` will fork a process for every three tests
+
+Each of these configurations can be specified independently with `-j` and `-k`;
+the ratio syntax is only used for syntactic sugar.
 
 Writing Parallel Tests
 ----------------------
