@@ -36,6 +36,22 @@ describe('Foo', function() {
 
   });
 
+  describe('Corge', function() {
+
+    beforeEach(function(done) {
+      setTimeout(done, 1000);
+    });
+
+    it('grault', function(done) {
+      setTimeout(done.bind(null, new Error('Oops')), 1000);
+    });
+
+    it('garply', function(done) {
+      setTimeout(done, 2000);
+    });
+
+  });
+
   afterEach(function() {
     // console.log('After "bar" and "qux"');
   });

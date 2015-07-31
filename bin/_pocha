@@ -9,7 +9,7 @@ var program = require('commander'),
   fs = require('fs'),
   resolve = path.resolve,
   exists = fs.existsSync || path.existsSync,
-  Pocha = require('../lib/index2'),
+  Pocha = require('../lib/index'),
   Mocha = require('mocha'),
   utils = Mocha.utils,
   join = path.join,
@@ -50,7 +50,8 @@ program
   .usage('[debug] [options] [files]')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-u, --ui <name>', 'specify user-interface (bdd)', 'bdd')
-  .option('-l, --list', 'list tests')
+  .option('-l, --list', "just list the tests (don't run them)")
+  .option('-p, --pattern <pattern>', 'specify a prefix or regex for filtering tests (regexes should be enclosed in "/")')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--harmony', 'enable all harmony features (except typeof)')
   .option('--es_staging', 'enable all staged features')
@@ -144,11 +145,11 @@ files = files.map(function(path){
 
 var pocha = new Pocha(files);
 if (program.list) {
-  pocha.list();
+  pocha.listTests(program.pattern);
   process.exit();
 }
 
-var runner = pocha.run();
+var runner = pocha.runTests(program.pattern);
 
 process.on('SIGINT', function() { runner.abort(); })
 
