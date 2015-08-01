@@ -30,7 +30,8 @@ equal to the number of CPUs in your computer.
 You can specify the number of tests each job runs concurrently with `-k`. When
 no argument is supplied, the number of concurrent tests is unbounded: pocha
 (or a child process) will run every test assigned to it concurrently. This
-is most useful for asynchronous tests.
+is most useful for asynchronous tests. The default value is arbitrarily set to
+5.
 
 ### Specifying a ratio of jobs to tests with `-j X:Y`
 
@@ -44,6 +45,11 @@ You can set the number of tests a job runs concurrently by passing a ratio to
 
 Each of these configurations can be specified independently with `-j` and `-k`;
 the ratio syntax is only used for syntactic sugar.
+
+### Disabling all parallelism and concurrency
+
+Pass `--sequential` (equivalent to `-j 1:1` or `--runner sequential`) to disable
+all parallelism and concurrency.
 
 Writing Parallel Tests
 ----------------------
