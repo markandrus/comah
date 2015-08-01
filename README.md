@@ -39,6 +39,7 @@ You can set the number of tests a job runs concurrently by passing a ratio to
 `-j`. For example,
 
 - `-j 1:1` specifies sequential execution
+- `-j 1:3` will run three tests at a time
 - `-j 3:2` will fork three processes, each running two tests at a time
 - `-j  :1` will fork a process for each test
 - `-j  :3` will fork a process for every three tests
