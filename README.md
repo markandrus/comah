@@ -59,6 +59,8 @@ argument is supplied, the number of jobs is unbounded: pocha will fork a
 process for every test in your test suite. By default, the number of jobs is
 equal to the number of CPUs in your computer.
 
+See [lib/runners/parallel.js](lib/runners/parallel.js) for implementation.
+
 ### Specifying the number of tests to run concurrently with `-k Y`
 
 You can specify the number of tests each job runs concurrently with `-k`. When
@@ -66,6 +68,8 @@ no argument is supplied, the number of concurrent tests is unbounded: pocha
 (or a child process) will run every test assigned to it concurrently. This
 is most useful for asynchronous tests. The default value is arbitrarily set to
 5.
+
+See [lib/runners/concurrent.js](lib/runners/concurrent.js) for implementation.
 
 ### Specifying a ratio of jobs to tests with `-j X:Y`
 
@@ -86,12 +90,16 @@ the ratio syntax is only used for syntactic sugar.
 Pass `--sequential` (equivalent to `-j 1:1` or `--runner sequential`) to disable
 all parallelism and concurrency.
 
+See [lib/runners/sequential.js](lib/runners/sequential.js) for implementation.
+
 Writing Parallel Tests
 ----------------------
 
 Pocha provides the same domain-specific language (DSL) for writing
 behavior-driven development (BDD) tests that you are used to with a couple of
 semantic differences due to parallelization.
+
+See [lib/dsl.js](lib/dsl.js) for implementation.
 
 ### `before` and `after`
 
