@@ -17,6 +17,40 @@ Usage
 You can use pocha like you would mocha. Run `pocha --help` for additional
 information.
 
+```
+$ pocha --help
+
+  Usage: _pocha [debug] [options] [files]
+
+  Options:
+
+    -h, --help                      output usage information
+    -V, --version                   output the version number
+    -R, --reporter <name>           specify the reporter to use
+    -u, --ui <name>                 specify user-interface (bdd)
+    -l, --list                      list the tests instead of running them
+    -p, --pattern <pattern>         specify a prefix or regex for filtering tests (regexes should be enclosed in "/")
+    -j, --jobs [number]             specify the number of jobs to run in parallel (no argument implies unbound; pass a ratio to also set concurrency)
+    -k, --concurrency [number]      specify the number of tests to run concurrently (no argument implies unbounded)
+    --runner <name>                 specify the runner to use
+    --sequential                    run tests sequentially (sets the runner to "sequential")
+    --compilers <ext>:<module>,...  use the given module(s) to compile files
+    --harmony                       enable all harmony features (except typeof)
+    --es_staging                    enable all staged features
+    --harmony-collections           enable harmony collections (sets, maps, and weak maps)
+    --harmony-generators            enable harmony generators
+    --harmony-proxies               enable harmony proxies
+    --harmony_shipping              enable all shipped harmony fetaures (iojs)
+    --harmony_arrow_functions       enable "harmony arrow functions" (iojs)
+    --harmony_rest_parameters       enable "harmony rest parameters" (iojs)
+    --harmony_proxies               enable "harmony proxies" (iojs)
+    --harmony_classes               enable "harmony classes" (iojs)
+    --interfaces                    display available interfaces
+    --reporters                     display available reporters
+    --runners                       display available runners
+
+```
+
 ### Specifying the number of jobs with `-j X`
 
 Like [make](https://www.gnu.org/software/make/manual/html_node/Parallel.html),
