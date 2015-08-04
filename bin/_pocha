@@ -165,7 +165,7 @@ files = files.map(function(path){
 // load
 
 // FIXME(mroberts): ...
-var Runner = require(runnersPath + program.runner);
+var Runner = require(runnersPath + (program.sequential ? 'sequential' : program.runner));
 
 var pocha = new Pocha(files, Reporter, new Runner());
 
