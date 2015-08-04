@@ -38,6 +38,8 @@ describe('Foo', function() {
 
   describe('Corge', function() {
 
+    // console.log('Building "Corge"');
+
     beforeEach(function(done) {
       setTimeout(done, 1000);
     });

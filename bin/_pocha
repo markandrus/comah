@@ -10,12 +10,13 @@ var program = require('commander'),
   resolve = path.resolve,
   exists = fs.existsSync || path.existsSync,
   Pocha = require('../lib/index'),
-  Mocha = require('mocha'),
-  utils = Mocha.utils,
+  utils = require('mocha').utils,
   join = path.join,
   cwd = process.cwd(),
-  ParallelRunner = require('../lib/runners/parallel'),
-  ConcurrentRunner = require('../lib/runners/concurrent');
+  reportersPath = '../lib/reporters/',
+  runnersPath = '../lib/runners/',
+  ParallelRunner = require(runnersPath + 'parallel'),
+  ConcurrentRunner = require(runnersPath + 'concurrent');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -55,6 +56,7 @@ program
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-u, --ui <name>', 'specify user-interface (bdd)', 'bdd')
   .option('-l, --list', 'list the tests instead of running them')
+  .option('-p, --tests <test>,...', 'specify a subset of tests in the test files to run', list)
   .option('-p, --pattern <pattern>', 'specify a prefix or regex for filtering tests (regexes should be enclosed in "/")')
   .option('-j, --jobs [number]', 'specify the number of jobs to run in parallel (no argument implies unbound; pass a ratio to also set concurrency)', ParallelRunner.DEFAULT_PARALLELISM)
   .option('-k, --concurrency [number]', 'specify the number of tests to run concurrently (no argument implies unbounded)', ConcurrentRunner.DEFAULT_CONCURRENCY)
@@ -95,6 +97,7 @@ program.compilers.forEach(function(c) {
 program.on('reporters', function(){
   console.log();
   console.log('    spec - hierarchical spec list');
+  console.log('    ipc - inter-process communication (IPC)');
   console.log();
   process.exit();
 });
@@ -129,12 +132,10 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter
 
-// pocha.reporter(program.reporter);
-
-// load reporter
+var Reporter;
 
 try {
-  Reporter = require('../lib/reporters/' + program.reporter);
+  Reporter = require(reportersPath + program.reporter);
 } catch (err) {
   try {
     Reporter = require(program.reporter);
@@ -163,13 +164,21 @@ files = files.map(function(path){
 
 // load
 
-var pocha = new Pocha(files, program.runner);
+// FIXME(mroberts): ...
+var Runner = require(runnersPath + program.runner);
+
+var pocha = new Pocha(files, Reporter, new Runner());
+
+if (program.tests) {
+  program.pattern = '/' + program.tests.join('|') + '/';
+}
+
 if (program.list) {
   pocha.listTests(program.pattern);
   process.exit();
 }
 
-var runner = pocha.runTests(program.pattern);
+pocha.runTests(program.pattern);
 
 process.on('SIGINT', function() { /* runner.abort(); */ })
 
